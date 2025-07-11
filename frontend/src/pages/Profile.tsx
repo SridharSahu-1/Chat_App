@@ -13,7 +13,7 @@ const Profile = () => {
     const reader = new FileReader();
 
     reader.readAsDataURL(file);
- 
+
     reader.onload = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
@@ -22,36 +22,39 @@ const Profile = () => {
   };
 
   return (
-    <div className="h-screen pt-20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
-        <div className="bg-base-300 rounded-xl p-6 space-y-8">
+        <div className="glass rounded-3xl p-8 space-y-8 fade-scale-in">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold ">Profile</h1>
-            <p className="mt-2">Your profile information</p>
+            <h1 className="text-3xl font-bold text-gradient-primary mb-2">
+              Profile
+            </h1>
+            <p className="text-muted-foreground">
+              Manage your account information
+            </p>
           </div>
 
-          {/* avatar upload section */}
-
+          {/* Avatar upload section */}
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
                 src={selectedImg || authUser.profilePic || "/avatar.png"}
                 alt="Profile"
-                className="size-32 rounded-full object-cover border-4 "
+                className="w-32 h-32 rounded-full object-cover border-4 border-white/20 shadow-elegant"
               />
               <label
                 htmlFor="avatar-upload"
                 className={`
                   absolute bottom-0 right-0 
-                  bg-base-content hover:scale-105
-                  p-2 rounded-full cursor-pointer 
-                  transition-all duration-200
+                  bg-gradient-primary hover:scale-110
+                  p-3 rounded-full cursor-pointer 
+                  transition-all duration-200 shadow-elegant
                   ${
                     isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
                   }
                 `}
               >
-                <Camera className="w-5 h-5 text-base-200" />
+                <Camera className="w-5 h-5 text-white" />
                 <input
                   type="file"
                   id="avatar-upload"
@@ -62,7 +65,7 @@ const Profile = () => {
                 />
               </label>
             </div>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               {isUpdatingProfile
                 ? "Uploading..."
                 : "Click the camera icon to update your photo"}
@@ -70,37 +73,41 @@ const Profile = () => {
           </div>
 
           <div className="space-y-6">
-            <div className="space-y-1.5">
-              <div className="text-sm text-zinc-400 flex items-center gap-2">
+            <div className="space-y-2">
+              <div className="text-sm text-muted-foreground flex items-center gap-2">
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+              <div className="glass px-4 py-3 rounded-xl border border-white/20">
                 {authUser?.fullName}
-              </p>
+              </div>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="text-sm text-zinc-400 flex items-center gap-2">
+            <div className="space-y-2">
+              <div className="text-sm text-muted-foreground flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 Email Address
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+              <div className="glass px-4 py-3 rounded-xl border border-white/20">
                 {authUser?.email}
-              </p>
+              </div>
             </div>
           </div>
 
-          <div className="mt-6 bg-base-300 rounded-xl p-6">
-            <h2 className="text-lg font-medium  mb-4">Account Information</h2>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center justify-between py-2 border-b border-zinc-700">
-                <span>Member Since</span>
-                <span>{authUser.createdAt?.split("T")[0]}</span>
+          <div className="glass rounded-2xl p-6 border border-white/10">
+            <h2 className="text-lg font-semibold text-gradient-primary mb-4">
+              Account Information
+            </h2>
+            <div className="space-y-4 text-sm">
+              <div className="flex items-center justify-between py-2 border-b border-white/10">
+                <span className="text-muted-foreground">Member Since</span>
+                <span className="font-medium">
+                  {authUser.createdAt?.split("T")[0]}
+                </span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span>Account Status</span>
-                <span className="text-green-500">Active</span>
+                <span className="text-muted-foreground">Account Status</span>
+                <span className="text-emerald-400 font-medium">Active</span>
               </div>
             </div>
           </div>
@@ -109,4 +116,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;
