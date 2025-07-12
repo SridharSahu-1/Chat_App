@@ -11,7 +11,7 @@ export default function ChatBubble({
 }) {
   const [showOriginal, setShowOriginal] = useState(false);
   const isTranslated = message.translatedText != null;
-
+  
   return (
     <div className={`chat ${isOwn ? "chat-end" : "chat-start"}`}>
       <div className="chat-bubble flex flex-col">

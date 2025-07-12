@@ -26,32 +26,27 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Navigation */}
-          <div className="flex items-center gap-2">
-            <Link
-              to="/settings"
-              className="glass hover:bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
-            >
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline font-medium">Settings</span>
-            </Link>
+          {authUser && (
+            <div className="flex items-center gap-2">
+             
 
-            <Link
-              to="/profile"
-              className="glass hover:bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
-            >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline font-medium">Profile</span>
-            </Link>
+              <Link
+                to="/profile"
+                className="glass hover:bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
+              >
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline font-medium">Profile</span>
+              </Link>
 
-            <button
-              className="glass hover:bg-destructive/20 hover:text-destructive px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
-              onClick={logout}
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline font-medium">Logout</span>
-            </button>
-          </div>
+              <button
+                className="glass hover:bg-destructive/20 hover:text-destructive px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
+                onClick={logout}
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline font-medium">Logout</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

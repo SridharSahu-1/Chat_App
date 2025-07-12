@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Mail, Settings, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
@@ -101,6 +102,13 @@ const Profile = () => {
               Account Information
             </h2>
             <div className="space-y-4 text-sm">
+              <Link
+                to="/settings"
+                className="glass hover:bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
+              >
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline font-medium">Themes</span>
+              </Link>
               <div className="flex items-center justify-between py-2 border-b border-white/10">
                 <span className="text-muted-foreground">Member Since</span>
                 <span className="font-medium">
