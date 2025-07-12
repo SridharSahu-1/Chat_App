@@ -2,24 +2,13 @@ import mongoose, { Mongoose } from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
-    senderId: {
-      // type: Mongoose.Schema.Types.ObjectId,
-      type: String,
-      ref: "User",
-      require: true,
-    },
-    receiverId: {
-      // type: Mongoose.Schema.Types.ObjectId,
-      type: String,
-      ref: "User",
-      require: true,
-    },
-    text: {
-      type: String,
-    },
-    image: {
-      type: String,
-    },
+    senderId: { type: String, ref: "User", required: true },
+    receiverId: { type: String, ref: "User", required: true },
+    text: { type: String },
+    image: { type: String },
+    detectedLang: { type: String, default: null },
+    targetLang: { type: String, default: null },
+    translatedText: { type: String, default: null },
   },
   { timestamps: true }
 );

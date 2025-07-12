@@ -5,7 +5,7 @@ import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
-  
+
   try {
     if (!fullName || !password || !email) {
       return res.status(400).json({ message: "All fields are required" });
@@ -50,8 +50,6 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log("Inside login");
-  
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -116,4 +114,15 @@ export const checkAuth = (req, res) => {
     console.log("Error in checkAuth controller: ", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
+};
+
+export const changeLanguage = async (req, res) => {
+  console.log(req.body);
+  const lang = req.body.lang;
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { preferredLanguage: lang },
+    { new: true, runValidators: true }
+  );
+  res.json(updated);
 };

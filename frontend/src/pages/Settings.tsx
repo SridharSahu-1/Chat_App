@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { THEMES } from "../constants";
 import { useThemeStore } from "../store/useThemeStore";
 import { Send } from "lucide-react";
+import axiosInstance from "../lib/axios";
 
 const PREVIEW_MESSAGES = [
   { id: 1, content: "Hey! How's it going?", isSent: false },
@@ -13,6 +15,12 @@ const PREVIEW_MESSAGES = [
 
 const Settings = () => {
   const { theme, setTheme } = useThemeStore();
+
+  const [lang, setLang] = useState("");
+  const save = async () => {
+    await axiosInstance.put("/auth/language", { lang });
+    // maybe refresh user store…
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pt-20">
@@ -147,6 +155,18 @@ const Settings = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div>
+              <h2>Your Language</h2>
+              <select value={lang} onChange={(e) => setLang(e.target.value)}>
+                <option value="">Auto</option>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="es">Spanish</option>
+                {/* …more */}
+              </select>
+              <button onClick={save}>Save</button>
             </div>
           </div>
         </div>
