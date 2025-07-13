@@ -35,7 +35,7 @@ export const getMessages = async (req, res) => {
       ],
     });
 
-    // fetch paginated messages, sorted by createdAt descending (newest first)
+// fetch paginated messages, sorted by createdAt descending (newest first)
     const messages = await Message.find({
       $or: [
         { senderId: myId, receiverId: userToChatId },
@@ -45,6 +45,14 @@ export const getMessages = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
+
+    // // translate messages to user's preferred language
+    // const translatedMessages = messages.map(message => {
+    //   if (message.detectedLang !== message.targetLang) {
+    //     message.text = message.translatedText || message.text;
+    //   }
+    //   return message;
+    // });
 
     // return messages reversed (oldest first) if you want chronological order
     const ordered = messages.reverse();

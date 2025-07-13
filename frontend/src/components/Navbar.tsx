@@ -28,8 +28,6 @@ const Navbar = () => {
 
           {authUser && (
             <div className="flex items-center gap-2">
-             
-
               <Link
                 to="/profile"
                 className="glass hover:bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
