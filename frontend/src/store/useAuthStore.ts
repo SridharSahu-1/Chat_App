@@ -3,7 +3,8 @@ import toast from "react-hot-toast";
 import axiosInstance from "../lib/axios";
 import { io, Socket } from "socket.io-client";
 
-const BASE_URL = "http://localhost:5010";
+const BASE_URL =
+  import.meta.env.MODE === "development" ? "http://localhost:5010" : "/";
 
 export interface AuthUser {
   _id: string;
@@ -96,10 +97,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   updateProfile: async (data: Partial<AuthUser>) => {
     set({ isUpdatingProfile: true });
     try {
-      const response = await axiosInstance.put(
-        "/auth/update-profile",
-        data
-      );
+      const response = await axiosInstance.put("/auth/update-profile", data);
       set({ authUser: response.data });
       toast.success("Profile updated successfully");
     } catch (error: any) {
