@@ -31,6 +31,8 @@ interface ChatStore {
   selectedUser: ChatUser | null;
   isUsersLoading: boolean;
   isMessagesLoading: boolean;
+  currentPage: number;
+  totalPages: number;
 
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
@@ -47,6 +49,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  currentPage: 1,
+  totalPages: 1,
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -60,13 +64,29 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
-  getMessages: async (userId: string) => {
+  getMessages: async (userId: string, page = 1) => {
     set({ isMessagesLoading: true });
     try {
-      const response = await axiosInstance.get<ChatMessage[]>(
-        `/messages/${userId}`
-      );
-      set({ messages: response.data });
+      const response = await axiosInstance.get<{
+        data: ChatMessage[];
+        page: number;
+        limit: number;
+        totalCount: number;
+        totalPages: number;
+      }>(`/messages/${userId}?page=${page}&limit=20`);
+
+      // if page === 1, replace; else prepend older messages
+      if (page === 1) {
+        set({ messages: response.data.data });
+      } else {
+        set({ messages: [...response.data.data, ...get().messages] });
+      }
+
+      // store pagination meta for next fetch
+      set({
+        currentPage: response.data.page,
+        totalPages: response.data.totalPages,
+      });
     } catch (error: any) {
       toast.error(error?.message || "Failed to fetch messages");
     } finally {

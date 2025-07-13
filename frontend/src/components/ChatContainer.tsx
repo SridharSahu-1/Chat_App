@@ -1,6 +1,6 @@
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -14,9 +14,37 @@ const ChatContainer = () => {
     selectedUser,
     subscribeToMessages,
     unsubscribeFromMessages,
+    currentPage,
+    totalPages,
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // load first page
+  useEffect(() => {
+    if (selectedUser) getMessages(selectedUser._id, 1);
+    subscribeToMessages();
+    return () => unsubscribeFromMessages();
+  }, [selectedUser?._id]);
+
+  // infinite scroll: on scroll to top, load more if available
+  const handleScroll = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (el.scrollTop < 50 && !isMessagesLoading && currentPage < totalPages) {
+      // fetch next page
+      getMessages(selectedUser._id, currentPage + 1);
+    }
+  }, [currentPage, totalPages, isMessagesLoading, selectedUser]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   useEffect(() => {
     getMessages(selectedUser._id);
@@ -48,7 +76,7 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col overflow-auto" ref={containerRef}>
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
