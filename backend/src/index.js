@@ -24,23 +24,10 @@ app.use("/api/messages", messageRoutes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("*", (req, res) => {
+  app.get("/*splat", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
   });
 }
-
-
-// ── DEBUG: print every method + path so we can spot the bad one ──
-console.log(
-  app._router?.stack
-    .filter((layer) => layer.route)
-    .map((layer) => {
-      const methods = Object.keys(layer.route.methods)
-        .map((m) => m.toUpperCase())
-        .join("|");
-      return `${methods} ${layer.route.path}`;
-    })
-);
 
 server.listen(PORT, () => {
   console.log("Server is running on PORT: " + PORT);
