@@ -6,6 +6,7 @@ import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import ChatBubble from "./ChatBubble";
 import { formatMessageTime } from "../lib/utils";
+import { User } from "lucide-react";
 
 const ChatContainer = () => {
   const {
@@ -19,8 +20,8 @@ const ChatContainer = () => {
     totalPages,
   } = useChatStore();
   const { authUser } = useAuthStore();
-  const messageEndRef = useRef(null);
-  const scrollContainerRef = useRef(null);
+  const messageEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Load initial messages and subscribe
   useEffect(() => {
@@ -62,9 +63,9 @@ const ChatContainer = () => {
 
   if (isMessagesLoading) {
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full w-full chat-container">
         <ChatHeader />
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto p-6">
           <MessageSkeleton />
         </div>
         <MessageInput />
@@ -73,72 +74,108 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full chat-container">
       <ChatHeader />
 
       <div
-        className="flex-1 overflow-y-auto p-4 space-y-4"
+        className="flex-1 overflow-y-auto p-6 space-y-1"
         ref={scrollContainerRef}
       >
-        {messages.map((message) => (
-          <div key={message._id} className="flex items-end space-x-2">
-            {/* Avatar and timestamp */}
-            <div
-              className={`chat-image avatar ${
-                message.senderId === authUser._id ? "order-2" : "order-1"
-              }`}
+        {currentPage < totalPages && (
+          <div className="text-center py-2">
+            <button
+              onClick={() => getMessages(selectedUser._id, currentPage + 1)}
+              className="text-sm text-primary hover:underline"
+              disabled={isMessagesLoading}
             >
-              <div className="w-10 h-10 rounded-full border">
-                <img
-                  src={
-                    message.senderId === authUser._id
-                      ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
-                  }
-                  alt="profile pic"
-                />
-              </div>
-            </div>
+              {isMessagesLoading ? "Loading..." : "Load more messages"}
+            </button>
+          </div>
+        )}
 
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-1">
-                <time className="text-xs opacity-50">
-                  {formatMessageTime(message.createdAt)}
-                </time>
-              </div>
-              <ChatBubble
-                message={message}
-                currentLang={authUser.preferredLanguage}
-                isOwn={message.senderId === authUser?._id}
-              />
-              {message.image && (
-                <div
-                  className={`mt-2 ${
-                    message.senderId === authUser._id
-                      ? "flex justify-end mr-2"
-                      : "flex justify-start ml-2"
-                  }`}
-                >
-                  <img
-                    src={message.image}
-                    alt="Attachment"
-                    className="max-w-xs rounded-md"
-                    onLoad={() =>
-                      messageEndRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                      })
-                    }
-                  />
+        {messages.map((message, index) => {
+          const isOwn = message.senderId === authUser._id;
+          const showAvatar =
+            index === 0 ||
+            messages[index - 1].senderId !== message.senderId ||
+            new Date(message.createdAt).getTime() -
+              new Date(messages[index - 1].createdAt).getTime() >
+              300000;
+
+          return (
+            <div key={message._id} className="flex items-end gap-3 group">
+              {!isOwn && (
+                <div className="w-8 h-8 flex-shrink-0">
+                  {showAvatar ? (
+                    <div className="w-8 h-8 rounded-full bg-muted overflow-hidden border border-border-subtle">
+                      {selectedUser.profilePic ? (
+                        <img
+                          src={selectedUser.profilePic}
+                          alt={selectedUser.fullName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                          <User className="w-4 h-4 text-primary" />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8"></div>
+                  )}
                 </div>
               )}
-              {/* {message.text && <p className="mt-1">{message.text}</p>} */}
+
+              <div
+                className={`flex-1 ${isOwn ? "flex flex-col justify-end" : ""}`}
+              >
+                {showAvatar && (
+                  <div
+                    className={`text-xs text-text-muted mb-1 px-1 ${
+                      isOwn ? "text-right" : ""
+                    }`}
+                  >
+                    {formatMessageTime(message.createdAt)}
+                  </div>
+                )}
+
+                <ChatBubble
+                  message={message}
+                  currentLang={authUser.preferredLanguage}
+                  isOwn={isOwn}
+                />
+
+                {message.image && (
+                  <div
+                    className={`mt-2 ${
+                      isOwn ? "flex justify-end" : "flex justify-start"
+                    }`}
+                  >
+                    <div className="max-w-sm rounded-xl overflow-hidden shadow-sm border border-border-subtle">
+                      <img
+                        src={message.image}
+                        alt="Attachment"
+                        className="w-full h-auto"
+                        onLoad={() =>
+                          messageEndRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {isOwn && <div className="w-8 h-8 flex-shrink-0"></div>}
             </div>
-          </div>
-        ))}
+          );
+        })}
+
         <div ref={messageEndRef} />
       </div>
 
-      <div className="border-t p-4">
+      <div className="border-t border-border-subtle bg-card p-4">
         <MessageInput />
       </div>
     </div>
