@@ -139,11 +139,7 @@ const ChatContainer = () => {
                   </div>
                 )}
 
-                <ChatBubble
-                  message={message}
-                  currentLang={authUser.preferredLanguage}
-                  isOwn={isOwn}
-                />
+                <ChatBubble message={message} isOwn={isOwn} />
 
                 {message.image && (
                   <div

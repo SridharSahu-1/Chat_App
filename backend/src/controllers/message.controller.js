@@ -46,15 +46,7 @@ export const getMessages = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
-    // // translate messages to user's preferred language
-    // const translatedMessages = messages.map(message => {
-    //   if (message.detectedLang !== message.targetLang) {
-    //     message.text = message.translatedText || message.text;
-    //   }
-    //   return message;
-    // });
 
-    // return messages reversed (oldest first) if you want chronological order
     const ordered = messages.reverse();
 
     res.status(200).json({
@@ -77,7 +69,7 @@ export const sendMessage = async (req, res) => {
     const senderId = req.user._id;
 
     // Upload image if present
-    let imageUrl= null;
+    let imageUrl = null;
     if (image) {
       const uploadResponse = await cloudinary.uploader.upload(image);
       imageUrl = uploadResponse.secure_url;
@@ -110,8 +102,6 @@ export const sendMessage = async (req, res) => {
           to: targetLang,
           client: 'gtx',  // use gtx to reduce 403
         });
-        console.log('Translation result:', result);
-
         newMessage.translatedText = result.text;
         newMessage.detectedLang = result.from?.language?.iso || sourceLang;
       } catch (err) {
@@ -121,7 +111,6 @@ export const sendMessage = async (req, res) => {
       }
     }
 
-    // Save and emit via socket
     await newMessage.save();
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
