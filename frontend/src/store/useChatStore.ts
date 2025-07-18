@@ -33,12 +33,15 @@ interface ChatStore {
   isMessagesLoading: boolean;
   currentPage: number;
   totalPages: number;
+  typingUsers: string[];
 
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
   sendMessage: (messageData: MessagePayload) => Promise<void>;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
+  subscribeToTypingEvents: () => void; 
+  unsubscribeFromTypingEvents: () => void; 
   setSelectedUser: (user: ChatUser) => void;
 }
 
@@ -51,6 +54,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   isMessagesLoading: false,
   currentPage: 1,
   totalPages: 1,
+  typingUsers: [],
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -135,6 +139,34 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     socket.off("newMessage");
   },
+
+  // ✨ --- ADD TYPING EVENT SUBSCRIPTIONS --- ✨
+  subscribeToTypingEvents: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    socket.on("typing", ({ senderId }) => {
+      // Add user to typing list if not already present
+      if (!get().typingUsers.includes(senderId)) {
+        set((state) => ({ typingUsers: [...state.typingUsers, senderId] }));
+      }
+    });
+
+    socket.on("stopTyping", ({ senderId }) => {
+      // Remove user from typing list
+      set((state) => ({
+        typingUsers: state.typingUsers.filter((id) => id !== senderId),
+      }));
+    });
+  },
+
+  unsubscribeFromTypingEvents: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off("typing");
+    socket.off("stopTyping");
+  },
+  // ✨ --- END OF TYPING EVENT SUBSCRIPTIONS --- ✨
 
   setSelectedUser: (user: ChatUser) => set({ selectedUser: user }),
 }));

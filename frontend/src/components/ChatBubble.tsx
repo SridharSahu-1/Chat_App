@@ -64,30 +64,17 @@ export default function ChatBubble({
               {toggleLabel === "Show Original" ? (
                 <>
                   <RotateCcw className="w-3 h-3" />
-                  <span>Show Original</span>
+                  <span className="text-[10px]">Show Original</span>
                 </>
               ) : (
                 <>
                   <Globe className="w-3 h-3" />
-                  <span>Show Translation</span>
+                  <span className="text-[10px]">Show Translation</span>
                 </>
               )}
             </button>
           )}
         </div>
-
-        {message.translatedText && (
-          <div
-            className={`
-              absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center
-              ${isOwn ? "bg-white/20" : "bg-primary/10"}
-            `}
-          >
-            <Globe
-              className={`w-2 h-2 ${isOwn ? "text-white" : "text-primary"}`}
-            />
-          </div>
-        )}
       </div>
     </div>
   );

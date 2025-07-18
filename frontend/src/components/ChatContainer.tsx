@@ -18,6 +18,9 @@ const ChatContainer = () => {
     unsubscribeFromMessages,
     currentPage,
     totalPages,
+    typingUsers,
+    subscribeToTypingEvents,
+    unsubscribeFromTypingEvents,
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -28,15 +31,19 @@ const ChatContainer = () => {
     if (selectedUser) {
       getMessages(selectedUser._id, 1);
       subscribeToMessages();
+      subscribeToTypingEvents();
     }
     return () => {
       unsubscribeFromMessages();
+      unsubscribeFromTypingEvents();
     };
   }, [
     selectedUser?._id,
     getMessages,
     subscribeToMessages,
     unsubscribeFromMessages,
+    subscribeToTypingEvents,
+    unsubscribeFromTypingEvents,
   ]);
 
   // Infinite scroll: load more on scroll to top
@@ -61,7 +68,7 @@ const ChatContainer = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (isMessagesLoading) {
+  if (isMessagesLoading && currentPage === 1) {
     return (
       <div className="flex flex-col h-full w-full chat-container">
         <ChatHeader />
@@ -72,6 +79,9 @@ const ChatContainer = () => {
       </div>
     );
   }
+
+  const isSelectedUserTyping = typingUsers.includes(selectedUser?._id);
+  console.log({isSelectedUserTyping});
 
   return (
     <div className="flex flex-col h-full w-full chat-container">
@@ -172,6 +182,9 @@ const ChatContainer = () => {
       </div>
 
       <div className="border-t border-border-subtle bg-card p-4">
+        <div className="h-5 text-sm text-text-muted italic">
+          {isSelectedUserTyping && `${selectedUser.fullName} is typing...`}
+        </div>
         <MessageInput />
       </div>
     </div>
