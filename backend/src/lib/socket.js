@@ -41,7 +41,57 @@ io.on("connection", (socket) => {
       io.to(receiverSocketId).emit("stopTyping", { senderId: userId });
     }
   });
-  // ✨ --- END OF TYPING INDICATOR LOGIC --- ✨
+
+  // ✨ --- VIDEO CALL SIGNALING LOGIC --- ✨
+  socket.on("call-user", ({ to, offer, callType }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("incoming-call", {
+        from: userId,
+        offer,
+        callType, // 'video' or 'audio'
+        callerSocketId: socket.id,
+      });
+    }
+  });
+
+  socket.on("answer-call", ({ to, answer }) => {
+    const callerSocketId = getReceiverSocketId(to);
+    if (callerSocketId) {
+      io.to(callerSocketId).emit("call-answered", {
+        answer,
+        from: userId,
+      });
+    }
+  });
+
+  socket.on("ice-candidate", ({ to, candidate }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("ice-candidate", {
+        candidate,
+        from: userId,
+      });
+    }
+  });
+
+  socket.on("end-call", ({ to }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("call-ended", {
+        from: userId,
+      });
+    }
+  });
+
+  socket.on("reject-call", ({ to }) => {
+    const callerSocketId = getReceiverSocketId(to);
+    if (callerSocketId) {
+      io.to(callerSocketId).emit("call-rejected", {
+        from: userId,
+      });
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id);

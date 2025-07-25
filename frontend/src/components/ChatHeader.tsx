@@ -2,7 +2,7 @@ import { X, Phone, Video, MoreHorizontal, User } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 
-const ChatHeader = () => {
+const ChatHeader = ({ onVideoCall, onAudioCall }) => {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
@@ -46,20 +46,30 @@ const ChatHeader = () => {
         </div>
 
         {/* Action Buttons */}
-        {/* <div className="flex items-center gap-1">
-          <button className="w-9 h-9 rounded-lg hover:bg-muted flex items-center justify-center transition-colors">
+        <div className="flex items-center gap-1">
+          {/* Audio Call Button */}
+          <button
+            onClick={onAudioCall}
+            className="w-9 h-9 rounded-lg hover:bg-muted flex items-center justify-center transition-colors"
+            title="Audio call"
+          >
             <Phone className="w-4 h-4 text-text-secondary" />
           </button>
 
-          <button className="w-9 h-9 rounded-lg hover:bg-muted flex items-center justify-center transition-colors">
+          {/* Video Call Button */}
+          <button
+            onClick={onVideoCall}
+            className="w-9 h-9 rounded-lg hover:bg-muted flex items-center justify-center transition-colors"
+            title="Video call"
+          >
             <Video className="w-4 h-4 text-text-secondary" />
           </button>
 
-          <button className="w-9 h-9 rounded-lg hover:bg-muted flex items-center justify-center transition-colors">
+          {/* <button className="w-9 h-9 rounded-lg hover:bg-muted flex items-center justify-center transition-colors">
             <MoreHorizontal className="w-4 h-4 text-text-secondary" />
-          </button>
+          </button> */}
 
-          <div className="w-px h-6 bg-border-subtle mx-2"></div>
+          {/* <div className="w-px h-6 bg-border-subtle mx-2"></div> */}
 
           <button
             onClick={() => setSelectedUser(null)}
@@ -67,7 +77,7 @@ const ChatHeader = () => {
           >
             <X className="w-4 h-4" />
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -47,9 +47,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       get().connectSocket();
     } catch (error: any) {
       set({ authUser: null });
-      toast.error(
-        error?.response?.data?.message || "Authentication check failed"
-      );
+      if (error?.response?.status !== 401) {
+        toast.error(
+          error?.response?.data?.message || "Authentication check failed"
+        );
+      }
     } finally {
       set({ isCheckingAuth: false });
     }
