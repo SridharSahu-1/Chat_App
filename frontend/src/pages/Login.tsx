@@ -45,7 +45,7 @@ const Login = () => {
               </div>
               <input
                 type="email"
-                className="glass w-full pl-10 pr-4 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={(e) =>
@@ -65,7 +65,7 @@ const Login = () => {
               </div>
               <input
                 type={showPassword ? "text" : "password"}
-                className="glass w-full pl-10 pr-12 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
+                className="w-full pl-10 pr-12 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) =>

@@ -43,7 +43,7 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-6">
-      <div className="glass rounded-3xl p-8 w-full max-w-md fade-scale-in">
+      <div className="rounded-3xl p-8 w-full max-w-md fade-scale-in">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center gap-2 group">
@@ -68,7 +68,7 @@ const SignUp = () => {
               </div>
               <input
                 type="text"
-                className="glass w-full pl-10 pr-4 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                 placeholder="John Doe"
                 value={formData.fullName}
                 onChange={(e) =>
@@ -86,7 +86,7 @@ const SignUp = () => {
               </div>
               <input
                 type="email"
-                className="glass w-full pl-10 pr-4 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={(e) =>
@@ -106,7 +106,7 @@ const SignUp = () => {
               </div>
               <input
                 type={showPassword ? "text" : "password"}
-                className="glass w-full pl-10 pr-12 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
+                className="w-full pl-10 pr-12 py-3 rounded-xl border border-white/20 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground"
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) =>

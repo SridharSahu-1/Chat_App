@@ -263,6 +263,8 @@ const ChatContainer = () => {
     endCall,
     toggleVideo,
     toggleAudio,
+    localStream,
+    remoteStream,
   } = useVideoCall();
 
   // The modal is open whenever a call is active (not 'idle').
@@ -471,6 +473,8 @@ const ChatContainer = () => {
         rejectCall={rejectCall}
         toggleVideo={toggleVideo}
         toggleAudio={toggleAudio}
+        localStream={localStream}
+        remoteStream={remoteStream}
       />
     </div>
   );

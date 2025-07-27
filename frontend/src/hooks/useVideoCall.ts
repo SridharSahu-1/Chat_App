@@ -10,6 +10,8 @@ export const useVideoCall = () => {
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [callType, setCallType] = useState("video"); // 'video' or 'audio'
+  const [localStream, setLocalStream] = useState(null); // ✨ ADD: State for local stream
+  const [remoteStream, setRemoteStream] = useState(null); // ✨ ADD: State for remote stream
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
@@ -41,10 +43,12 @@ export const useVideoCall = () => {
     };
 
     peerConnection.ontrack = (event) => {
+      // console.log("Received remote track:", event.streams[0]);
+      // if (remoteVideoRef.current) {
+      //   remoteVideoRef.current.srcObject = event.streams[0];
+      // }
       console.log("Received remote track:", event.streams[0]);
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = event.streams[0];
-      }
+      setRemoteStream(event.streams[0]);
     };
 
     peerConnection.onconnectionstatechange = () => {
@@ -85,9 +89,10 @@ export const useVideoCall = () => {
         });
 
         localStreamRef.current = stream;
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
+        setLocalStream(stream);
+        // if (localVideoRef.current) {
+        //   localVideoRef.current.srcObject = stream;
+        // }
 
         // Create peer connection
         peerConnectionRef.current = createPeerConnection();
@@ -139,9 +144,10 @@ export const useVideoCall = () => {
       });
 
       localStreamRef.current = stream;
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
+      setLocalStream(stream);
+      // if (localVideoRef.current) {
+      //   localVideoRef.current.srcObject = stream;
+      // }
 
       // Create peer connection
       peerConnectionRef.current = createPeerConnection();
@@ -219,6 +225,8 @@ export const useVideoCall = () => {
       remoteVideoRef.current.srcObject = null;
     }
 
+    setLocalStream(null);
+    setRemoteStream(null);
     setCallStatus("idle");
     setRemoteUserId(null);
     setIncomingCall(null);
@@ -337,5 +345,7 @@ export const useVideoCall = () => {
     endCall,
     toggleVideo,
     toggleAudio,
+    localStream,
+    remoteStream,
   };
 };

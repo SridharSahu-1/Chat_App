@@ -41,7 +41,7 @@ const Sidebar = () => {
             <h2 className="font-semibold text-text-primary">
               Contacts ({users.length} total)
             </h2>
-            <p className="text-sm text-text-muted">{onlineCount} online</p>
+            <p className="text-sm text-text-muted">{onlineCount > 0 ? onlineCount : 0} online</p>
           </div>
         </div>
 
