@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { THEMES } from "../constants";
 import { useThemeStore } from "../store/useThemeStore";
-import { Send } from "lucide-react";
+import { Send, Cog, Languages, Palette, Eye, Save } from "lucide-react"; // ✨ Icons imported
 import axiosInstance from "../lib/axios";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../store/useAuthStore";
 
 const PREVIEW_MESSAGES = [
   { id: 1, content: "Hey! How's it going?", isSent: false },
@@ -15,10 +17,17 @@ const PREVIEW_MESSAGES = [
 
 const Settings = () => {
   const { theme, setTheme } = useThemeStore();
-
-  const [lang, setLang] = useState("");
+  const { authUser } = useAuthStore();
+  // debugger;
+  const [lang, setLang] = useState(authUser?.preferredLanguage);
   const save = async () => {
-    await axiosInstance.put("/auth/language", { lang });
+    try {
+      await axiosInstance.put("/auth/language", { lang });
+      toast.success("Language saved");
+    } catch (e) {
+      console.log(e);
+      toast.error("Something went wrong");
+    }
     // maybe refresh user store…
   };
 
@@ -26,22 +35,60 @@ const Settings = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pt-20">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="glass rounded-3xl p-8 fade-scale-in">
-          <div className="space-y-8">
+          <div className="space-y-12">
+            {/* --- Header --- */}
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gradient-primary mb-2">
-                Settings
-              </h1>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <Cog className="w-8 h-8 text-primary" /> {/* ⚙️ Icon */}
+                <h1 className="text-3xl font-bold text-gradient-primary">
+                  Settings
+                </h1>
+              </div>
               <p className="text-muted-foreground">
                 Customize your ChatVibe experience
               </p>
             </div>
 
+            {/* --- Language Settings --- */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Languages className="w-6 h-6 text-primary" /> {/* 🌐 Icon */}
+                <h2 className="text-xl font-semibold text-gradient-primary">
+                  Your Language
+                </h2>
+              </div>
+              <div className="flex items-center gap-4 p-4 glass-subtle rounded-xl">
+                <select
+                  value={lang}
+                  onChange={(e) => setLang(e.target.value)}
+                  className=" flex-1 text-sm h-10 px-3 rounded-lg border border-white/20"
+                >
+                  <option value="">Auto-detect Language</option>
+                  <option value="en">English</option>
+                  <option value="hi">Hindi</option>
+                  <option value="es">Spanish</option>
+                  {/* …more */}
+                </select>
+                <button
+                  onClick={save}
+                  className="btn-glow h-10 px-4 rounded-lg flex items-center gap-2 cursor-pointer border"
+                >
+                  <Save size={16} /> {/* 💾 Icon */}
+                  <span>Save</span>
+                </button>
+              </div>
+            </div>
+
+            {/* --- Theme Settings --- */}
             <div className="space-y-6">
               <div className="space-y-3">
-                <h2 className="text-xl font-semibold text-gradient-primary">
-                  Theme
-                </h2>
-                <p className="text-sm text-muted-foreground">
+                <div className="flex items-center gap-3">
+                  <Palette className="w-6 h-6 text-primary" /> {/* 🎨 Icon */}
+                  <h2 className="text-xl font-semibold text-gradient-primary">
+                    Theme
+                  </h2>
+                </div>
+                <p className="text-sm text-muted-foreground pl-9">
                   Choose a theme for your chat interface
                 </p>
               </div>
@@ -78,16 +125,19 @@ const Settings = () => {
                 ))}
               </div>
 
-              {/* Preview Section */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gradient-primary">
-                  Preview
-                </h3>
-                <div className="glass rounded-2xl border border-white/20 overflow-hidden shadow-elegant">
+              {/* --- Preview Section --- */}
+              <div className="space-y-4 pt-6">
+                <div className="flex items-center gap-3">
+                  <Eye className="w-5 h-5 text-primary" /> {/* 👁️ Icon */}
+                  <h3 className="text-lg font-semibold text-gradient-primary">
+                    Preview
+                  </h3>
+                </div>
+                <div className=" rounded-2xl border border-white/20 overflow-hidden shadow-elegant">
+                  {/* Mock Chat UI */}
                   <div className="p-6">
                     <div className="max-w-lg mx-auto">
-                      {/* Mock Chat UI */}
-                      <div className="glass rounded-2xl shadow-elegant overflow-hidden border border-white/20">
+                      <div className="rounded-2xl shadow-elegant overflow-hidden border border-white/20">
                         {/* Chat Header */}
                         <div className="px-4 py-3 border-b border-white/10 bg-gradient-to-r from-primary/5 to-secondary/5">
                           <div className="flex items-center gap-3">
@@ -117,7 +167,7 @@ const Settings = () => {
                                   max-w-[80%] rounded-xl p-3 shadow-sm
                                   ${
                                     message.isSent
-                                      ? "bg-gradient-primary text-white shadow-glow"
+                                      ? "glass bg-gradient-primary text-white shadow-glow"
                                       : "glass border border-white/20"
                                   }
                                 `}
@@ -140,7 +190,7 @@ const Settings = () => {
                           <div className="flex gap-2">
                             <input
                               type="text"
-                              className="glass flex-1 text-sm h-10 px-3 rounded-lg border border-white/20 placeholder:text-muted-foreground"
+                              className="flex-1 text-sm h-10 px-3 rounded-lg border border-white/20 placeholder:text-muted-foreground"
                               placeholder="Type a message..."
                               value="This is a preview"
                               readOnly
@@ -155,18 +205,6 @@ const Settings = () => {
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div>
-              <h2>Your Language</h2>
-              <select value={lang} onChange={(e) => setLang(e.target.value)}>
-                <option value="">Auto</option>
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="es">Spanish</option>
-                {/* …more */}
-              </select>
-              <button onClick={save}>Save</button>
             </div>
           </div>
         </div>

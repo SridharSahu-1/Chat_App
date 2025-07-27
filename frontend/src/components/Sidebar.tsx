@@ -41,7 +41,9 @@ const Sidebar = () => {
             <h2 className="font-semibold text-text-primary">
               Contacts ({users.length} total)
             </h2>
-            <p className="text-sm text-text-muted">{onlineCount > 0 ? onlineCount : 0} online</p>
+            <p className="text-sm text-text-muted">
+              {onlineCount > 0 ? onlineCount : 0} online
+            </p>
           </div>
         </div>
 
@@ -65,9 +67,7 @@ const Sidebar = () => {
             onChange={(e) => setShowOnlineOnly(e.target.checked)}
             className="w-4 h-4 text-primary bg-muted border-border-subtle rounded focus:ring-primary focus:ring-2"
           />
-          <span className="text-sm text-text-secondary">
-            Filter Show online only
-          </span>
+          <span className="text-sm text-text-secondary">Show online only</span>
         </label>
       </div>
 

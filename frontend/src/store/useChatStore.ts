@@ -3,7 +3,6 @@ import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "./useAuthStore";
 
-// --- Interfaces ---
 export interface ChatUser {
   _id: string;
   fullName: string;
@@ -24,7 +23,6 @@ export interface MessagePayload {
   content: string;
 }
 
-// --- Chat Store Interface ---
 interface ChatStore {
   messages: ChatMessage[];
   users: ChatUser[];
@@ -45,7 +43,7 @@ interface ChatStore {
   setSelectedUser: (user: ChatUser) => void;
 }
 
-// --- Zustand Store ---
+
 export const useChatStore = create<ChatStore>((set, get) => ({
   messages: [],
   users: [],
@@ -79,14 +77,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         totalPages: number;
       }>(`/messages/${userId}?page=${page}&limit=20`);
 
-      // if page === 1, replace; else prepend older messages
       if (page === 1) {
         set({ messages: response.data.data });
       } else {
         set({ messages: [...response.data.data, ...get().messages] });
       }
 
-      // store pagination meta for next fetch
       set({
         currentPage: response.data.page,
         totalPages: response.data.totalPages,
@@ -140,7 +136,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     socket.off("newMessage");
   },
 
-  // ✨ --- ADD TYPING EVENT SUBSCRIPTIONS --- ✨
   subscribeToTypingEvents: () => {
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
@@ -166,7 +161,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     socket.off("typing");
     socket.off("stopTyping");
   },
-  // ✨ --- END OF TYPING EVENT SUBSCRIPTIONS --- ✨
 
   setSelectedUser: (user: ChatUser) => set({ selectedUser: user }),
 }));

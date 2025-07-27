@@ -297,7 +297,7 @@ export const useVideoCall = () => {
     const handleCallEnded = () => {
       console.log("Call ended by remote user");
       endCall();
-      toast.info("Call ended");
+      toast.error("Call ended");
     };
 
     const handleCallRejected = () => {

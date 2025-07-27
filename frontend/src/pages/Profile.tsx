@@ -81,7 +81,7 @@ const Profile = () => {
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <div className="glass px-4 py-3 rounded-xl border border-white/20">
+              <div className="px-4 py-3 rounded-xl border border-white/20">
                 {authUser?.fullName}
               </div>
             </div>
@@ -91,34 +91,27 @@ const Profile = () => {
                 <Mail className="w-4 h-4" />
                 Email Address
               </div>
-              <div className="glass px-4 py-3 rounded-xl border border-white/20">
+              <div className="px-4 py-3 rounded-xl border border-white/20">
                 {authUser?.email}
               </div>
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-6 border border-white/10">
+          <div className="rounded-2xl p-6 border border-white/10">
             <h2 className="text-lg font-semibold text-gradient-primary mb-4">
               Account Information
             </h2>
             <div className="space-y-4 text-sm">
-              <Link
-                to="/settings"
-                className="glass hover:bg-white/20 px-4 py-2 rounded-xl flex items-center gap-2 transition-all hover:scale-105"
-              >
-                <Settings className="w-4 h-4" />
-                <span className="hidden sm:inline font-medium">Themes</span>
-              </Link>
-              <div className="flex items-center justify-between py-2 border-b border-white/10">
+              <div className="flex items-center justify-between py-2  border-white/10">
                 <span className="text-muted-foreground">Member Since</span>
                 <span className="font-medium">
                   {authUser.createdAt?.split("T")[0]}
                 </span>
               </div>
-              <div className="flex items-center justify-between py-2">
+              {/* <div className="flex items-center justify-between py-2">
                 <span className="text-muted-foreground">Account Status</span>
                 <span className="text-emerald-400 font-medium">Active</span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
