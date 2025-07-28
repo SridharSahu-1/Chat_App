@@ -4,14 +4,14 @@ import toast from "react-hot-toast";
 
 export const useVideoCall = () => {
   const { socket } = useAuthStore();
-  const [callStatus, setCallStatus] = useState("idle"); // idle, calling, receiving, in-call
+  const [callStatus, setCallStatus] = useState("idle");
   const [incomingCall, setIncomingCall] = useState(null);
   const [remoteUserId, setRemoteUserId] = useState(null);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
-  const [callType, setCallType] = useState("video"); // 'video' or 'audio'
-  const [localStream, setLocalStream] = useState(null); // ✨ ADD: State for local stream
-  const [remoteStream, setRemoteStream] = useState(null); // ✨ ADD: State for remote stream
+  const [callType, setCallType] = useState("video"); 
+  const [localStream, setLocalStream] = useState(null); 
+  const [remoteStream, setRemoteStream] = useState(null); 
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);

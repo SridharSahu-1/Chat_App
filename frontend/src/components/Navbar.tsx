@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MessageSquare, User, LogOut } from "lucide-react";
+import { MessageSquare, User, LogOut, Cog } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const Navbar = () => {
@@ -72,7 +72,7 @@ const Navbar = () => {
                     to="/settings"
                     className="flex hover:bg-secondary/80 items-center gap-3 w-full text-left px-3 py-2 rounded-md hover:bg-muted-foreground/10 transition-colors text-sm font-medium text-text-secondary hover:text-text-primary"
                   >
-                    <User className="w-4 h-4" />
+                    <Cog className="w-4 h-4" />
                     <span>Settings</span>
                   </Link>
 

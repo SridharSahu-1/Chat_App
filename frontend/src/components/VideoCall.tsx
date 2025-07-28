@@ -10,6 +10,24 @@ import {
 import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
 
+interface VideoCallProps {
+  isOpen: boolean;
+  onClose: () => void;
+  callStatus: string;
+  incomingCall: any;
+  callType: string;
+  localVideoRef: React.RefObject<HTMLVideoElement>;
+  remoteVideoRef: React.RefObject<HTMLVideoElement>;
+  isVideoEnabled: boolean;
+  isAudioEnabled: boolean;
+  answerCall: () => void;
+  rejectCall: () => void;
+  toggleVideo: () => void;
+  toggleAudio: () => void;
+  localStream: MediaStream | null;
+  remoteStream: MediaStream | null;
+}
+
 const VideoCall = ({
   isOpen,
   onClose,
@@ -26,7 +44,7 @@ const VideoCall = ({
   toggleAudio,
   localStream,
   remoteStream,
-}: any) => {
+}: VideoCallProps) => {
   const { selectedUser } = useChatStore();
 
   console.log({ localVideoRef });
